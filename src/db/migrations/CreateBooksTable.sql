@@ -1,0 +1,6 @@
+CREATE TABLE Books (
+    BookID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(50) NOT NULL,
+    Author VARCHAR(50) NOT NULL,
+    IsAvailable boolean NOT NULL
+)
