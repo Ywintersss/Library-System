@@ -1,20 +1,23 @@
 using System;
 using System.IO;
 
+using databaseConn = database.databaseConnection;
+using Utility = Utilities.Utilities;
+
 namespace DBManager{
     public class DBManager{
-        private database.databaseConnection DBConn;
-        public Utilities.Utilities utilities;
+        private databaseConn DBConn;
+        public Utility utilities;
 
         public DBManager(){
-            DBConn = new database.databaseConnection();
+            DBConn = new databaseConn();
             {
                 DBConn.Host = "localhost";
                 DBConn.User = "Librarian";
                 DBConn.Password = "password123";
                 DBConn.databaseName = "LibraryManagement";
             }
-            utilities = new Utilities.Utilities();
+            utilities = new Utility();
         }
 
         public bool DBConnection(){
@@ -52,11 +55,4 @@ namespace DBManager{
             }
         }
     }
-
-    public class Program{
-        static void Main(string[] args){
-            DBManager dbManager = new DBManager();
-            dbManager.runMigration();
-        }
-    }   
 }

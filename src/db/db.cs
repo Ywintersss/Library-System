@@ -48,7 +48,6 @@ namespace database{
                     case 1050:
                         Console.WriteLine("Error: Table already exists");
                         break;
-                    
                 }
             }
         }
