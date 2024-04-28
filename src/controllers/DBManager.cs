@@ -7,7 +7,7 @@ using Utility = Utilities.Utilities;
 namespace DBManager{
     public class DBManager{
         private databaseConn DBConn;
-        public Utility utilities;
+        private Utility utilities;
 
         public DBManager(){
             DBConn = new databaseConn();

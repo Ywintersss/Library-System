@@ -14,7 +14,7 @@ namespace LibrarySystem{
     }
 
     public class Program{
-        static void Main(string[] args){
+        static void notMain(string[] args){
             Library.Init();
         }
     }
