@@ -6,14 +6,14 @@ namespace Loan{
     class Loan{
         private int LoanID;
         private Books Book;
-        private DateTime LoanDate;
-        private DateTime ReturnDate;
+        private string LoanDate, ReturnDate, DueDate;
 
-        public Loan(int LoanID, Books Book, DateTime LoanDate, DateTime ReturnDate){
+        public Loan(int LoanID, Books Book, string LoanDate, string ReturnDate, string DueDate){
             this.LoanID = LoanID;
             this.Book = Book;
             this.LoanDate = LoanDate;
             this.ReturnDate = ReturnDate;
+            this.DueDate = DueDate;
         }
 
         //Getters and Setters
@@ -25,24 +25,32 @@ namespace Loan{
             return Book;
         }
 
-        public DateTime getLoanDate(){
+        public string getLoanDate(){
             return LoanDate;
         }
 
-        public DateTime getReturnDate(){
+        public string getReturnDate(){
             return ReturnDate;
+        }
+
+        public string getDueDate(){
+            return DueDate;
         }
 
         public void setBook(Books Book){
             this.Book = Book;
         }
 
-        public void setLoanDate(DateTime LoanDate){
+        public void setLoanDate(string LoanDate){
             this.LoanDate = LoanDate;
         }
 
-        public void setReturnDate(DateTime ReturnDate){
+        public void setReturnDate(string ReturnDate){
             this.ReturnDate = ReturnDate;
+        }
+
+        public void setDueDate(string DueDate){
+            this.DueDate = DueDate;
         }
     }
 }

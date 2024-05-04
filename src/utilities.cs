@@ -12,12 +12,5 @@ namespace Utilities{
             return workingDirectory.Substring(0, index + endDirectory.Length);
         }
     }
-
-    class Program{
-        static void notMain(string[] args){
-            Utilities utilities = new Utilities();
-            
-        }
-    }
 }
     

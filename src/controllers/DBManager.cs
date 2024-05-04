@@ -30,10 +30,11 @@ namespace DBManager{
                 Console.WriteLine("Connection successful." );
             } else {
                 Console.WriteLine("Connection failed.");
-            }    
+            }
+
             string workingDirectory = utilities.getWorkingDirectory();
             string migrationPath = workingDirectory + "\\src\\db\\migrations\\";
-            Console.WriteLine(migrationPath);
+
             foreach (string file in Directory.GetFiles(migrationPath)){
                 string query = File.ReadAllText(file);
                 Console.WriteLine("Running migration for: " + file);
@@ -43,7 +44,7 @@ namespace DBManager{
                         continue;
                     }
                     try{                            
-                        DBConn.executeQuery();
+                        DBConn.executeNonQuery();
                     } catch (Exception e){
                         Console.WriteLine(e);
                     }
@@ -53,6 +54,7 @@ namespace DBManager{
                     Console.WriteLine(e);
                 }        
             }
+            DBConn.closeDB();
         }
     }
 }

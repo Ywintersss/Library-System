@@ -29,7 +29,7 @@ namespace database{
             return true;
         }
 
-        public void executeQuery(){
+        public void executeNonQuery(){
             if (Command == null){
                 Console.WriteLine("Error: No query is prepared. Command is null");
                 return;
@@ -48,7 +48,43 @@ namespace database{
                     case 1050:
                         Console.WriteLine("Error: Table already exists");
                         break;
+                    default:
+                        Console.WriteLine(e);
+                        break;
                 }
+            }
+        }
+
+        public List<string[]>? executeQuery(){
+            List<string[]> dataList = new List<string[]>();
+            if (Command == null){
+                Console.WriteLine("Error: No query is prepared. Command is null");
+                return null;
+            } 
+            try{
+                MySqlDataReader reader = Command.ExecuteReader();
+                while (reader.Read()){
+                    //initialize values with array size of reader.FieldCount(number of columns)
+                    string[] values = new string[reader.FieldCount];
+                    //iterate through each column for each row
+                    for (int i = 0; i < reader.FieldCount; i++){
+                        //add values to array
+                        if(reader[i] != DBNull.Value){
+                            #pragma warning disable CS8601 // Possible null reference assignment.
+                            values[i] = reader[i].ToString();
+                            #pragma warning restore CS8601 // Possible null reference assignment.
+                        } else {
+                            //handle the null value case
+                            values[i] = null; // Or any other default value
+                        }
+                    }
+                    dataList.Add(values);
+                }
+                reader.Close();
+                return dataList;
+            } catch (Exception e){
+                Console.WriteLine(e);
+                return null;
             }
         }
         public void closeDB(){

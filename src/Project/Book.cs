@@ -7,34 +7,32 @@ namespace Book{
         private bool isAvailable = isAvailable;
 
 
-    //Getters and Setters
-    public int getBookID(){
-        return bookID;
-    }
+        //Getters and Setters
+        public int getBookID(){
+            return bookID;
+        }
 
-    public string getTitle(){
-        return title;
-    }
+        public string getTitle(){
+            return title;
+        }
 
-    public string getAuthor(){
-        return author;
-    }
+        public string getAuthor(){
+            return author;
+        }
 
-    public bool getIsAvailable(){
-        return isAvailable;
-    }
+        public bool getIsAvailable(){
+            return isAvailable;
+        }
 
-    public void setTitle(string title){
-        this.title = title;
-    }
+        public void setTitle(string title){
+            this.title = title;
+        }
 
-    public void setAuthor(string author){
-        this.author = author;
-    }
-    public void setIsAvailable(bool isAvailable){
-        this.isAvailable = isAvailable;
-    }
-
-
+        public void setAuthor(string author){
+            this.author = author;
+        }
+        public void setIsAvailable(bool isAvailable){
+            this.isAvailable = isAvailable;
+        }
     }
 }

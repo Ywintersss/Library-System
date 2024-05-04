@@ -3,6 +3,7 @@ using System;
 using Books = Book.Book;
 using Loans = Loan.Loan;
 using Utility = Utilities.Utilities;
+using bkManager = BookManager.BookManager;
 
 using databaseConn = database.databaseConnection;
 
@@ -22,18 +23,32 @@ namespace LoanManager{
             return this.DBConn.DBConnection();
         }
 
+        public void updateBook(Books book){
+            string query = $"UPDATE books SET IsAvailable = {!book.getIsAvailable()} WHERE BookID = {book.getBookID()};";
+            if(this.DBConnection()){
+                Console.WriteLine("Connection successful." );
+            } else {
+                Console.WriteLine("Connection failed.");
+            }
+            try{
+                if (!DBConn.prepareQuery(query)){
+                    Console.WriteLine("Error running query");
+                }
+                try{                            
+                    DBConn.executeNonQuery();
+                } catch (Exception e){
+                    Console.WriteLine(e);
+                }
+                Console.WriteLine("Book updated successfully");
+            } catch (Exception e){
+                Console.WriteLine(e);
+            }
+        }
+
         //Add loan to database
         public void addLoan(Books book, int loanPeriod){
-            string LoanDate = DateTime.Now.Date.ToString("yyyy-MM-dd");
-            string ReturnDate = DateTime.Now.Date.AddDays(loanPeriod).ToString("yyyy-MM-dd");
-
-            Console.WriteLine(book.getBookID()); 
-            Console.WriteLine(LoanDate);
-            Console.WriteLine(ReturnDate);
-
-            string query = $"INSERT INTO loans(BookID, LoanDate, ReturnDate) VALUES({book.getBookID()}, '{LoanDate}', '{ReturnDate}');";
-            Console.WriteLine(query);
-
+            string query = $"INSERT INTO loans(BookID, LoanDate, ReturnDate, DueDate) VALUES({book.getBookID()}, NOW(), null, NOW() + INTERVAL {loanPeriod} DAY);";
+            
             if(this.DBConnection()){
                 Console.WriteLine("Connection successful." );
             } else {
@@ -44,21 +59,24 @@ namespace LoanManager{
                     Console.WriteLine("Error running query");
                 }
                 try{                            
-                    DBConn.executeQuery();
+                    DBConn.executeNonQuery();
+                    Console.WriteLine("Loan added successfully");
+                    try{
+                        updateBook(book);
+                    } catch (Exception e){
+                        Console.WriteLine(e);
+                    } 
                 } catch (Exception e){
                     Console.WriteLine(e);
                 }
-
-                Console.WriteLine("Loan added successfully");
             } catch (Exception e){
                 Console.WriteLine(e);
             }
-            
         }
 
-        public List<Loans> GetActiveLoans(){
-            List<Loans> loans = new List<Loans>();
-            string query = "SELECT * FROM loans WHERE ReturnDate > NOW()";
+        //Return loan from database
+        public void returnLoan(Books book){
+            string query = $"UPDATE loans SET ReturnDate = NOW() WHERE BookID = {book.getBookID()};";
             if(this.DBConnection()){
                 Console.WriteLine("Connection successful." );
             } else {
@@ -69,23 +87,90 @@ namespace LoanManager{
                     Console.WriteLine("Error running query");
                 }
                 try{                            
-                    DBConn.executeQuery();
+                    DBConn.executeNonQuery();
+                    Console.WriteLine("Loan returned successfully");
+                    try{
+                        updateBook(book);
+                    } catch (Exception e){
+                        Console.WriteLine(e);
+                    }
                 } catch (Exception e){
                     Console.WriteLine(e);
                 }
 
-                Console.WriteLine("Loan added successfully");
             } catch (Exception e){
                 Console.WriteLine(e);
             }
-            return loans;
         }
-    }
 
-    class Program{
-        static void Main(string[] args){
-            LoanManager lm = new LoanManager();
-            lm.addLoan(new Books(001, "The Great Gatsby", "F. Scott Fitzgerald", true), 7);
+        public List<Loans>? GetLoans(List<Books> books){
+            List<Loans> loans = new List<Loans>();
+            List<Books> cache = new List<Books>();
+            string query = "SELECT * FROM loans";
+            if(this.DBConnection()){
+                Console.WriteLine("Connection successful." );
+            } else {
+                Console.WriteLine("Connection failed.");
+            }
+            try{
+                if (!DBConn.prepareQuery(query)){
+                    Console.WriteLine("Error running query");
+                }
+                try{    
+                    foreach (var loan in DBConn.executeQuery()){
+                        foreach (var book in books){
+                            if (cache.Contains(book)){ continue; }
+                            if (book.getBookID() == Convert.ToInt32(loan[1])){
+                                loans.Add(new Loans(Convert.ToInt32(loan[0]), book, Convert.ToDateTime(loan[2]).ToString("yyyy-MM-dd"), loan[3] == null ? "null" : Convert.ToDateTime(loan[3]).ToString("yyyy-MM-dd"), Convert.ToDateTime(loan[4]).ToString("yyyy-MM-dd")));
+                                cache.Add(book);
+                            }
+                        }
+                    };
+                    return loans;
+                } catch (Exception e){
+                    Console.WriteLine(e);
+                }
+
+                Console.WriteLine("Loans queried successfully");
+            } catch (Exception e){
+                Console.WriteLine(e);
+            }         
+            return null;
+        }
+
+        public List<Loans>? GetActiveLoans(List<Books> books){
+            List<Loans> loans = new List<Loans>();
+            List<Books> cache = new List<Books>();
+            string query = "SELECT * FROM loans WHERE DueDate > NOW() AND ReturnDate IS NULL";
+            if(this.DBConnection()){
+                Console.WriteLine("Connection successful." );
+            } else {
+                Console.WriteLine("Connection failed.");
+            }
+            try{
+                if (!DBConn.prepareQuery(query)){
+                    Console.WriteLine("Error running query");
+                }
+                try{    
+                    foreach (var loan in DBConn.executeQuery()){
+                        foreach (var book in books){
+                            if (cache.Contains(book)){ continue; }
+                            if (book.getBookID() == Convert.ToInt32(loan[1])){
+                                loans.Add(new Loans(Convert.ToInt32(loan[0]), book, Convert.ToDateTime(loan[2]).ToString("yyyy-MM-dd"), loan[3] == null ? "null" : Convert.ToDateTime(loan[3]).ToString("yyyy-MM-dd"), Convert.ToDateTime(loan[4]).ToString("yyyy-MM-dd")));
+                                cache.Add(book);
+                            }
+                        }
+                    };
+                    return loans;
+                } catch (Exception e){
+                    Console.WriteLine(e);
+                }
+
+                Console.WriteLine("Active Loans queried successfully");
+            } catch (Exception e){
+                Console.WriteLine(e);
+            }
+            return null;
         }
     }
 }
