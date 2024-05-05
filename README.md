@@ -17,6 +17,10 @@ CREATE USER 'Librarian'@'localhost' IDENTIFIED BY 'password123'; <br>
 grant all privileges on *.* to 'Librarian'@'localhost'; <br>
 Database librarymanagement was manually created in MySQL Workbench<br>
 
+# Project setup <br>
+Clone/Fork the github project **https://github.com/Ywintersss/Library-System** <br>
+Ensure it is located in a Library-System folder/directory <br>
+
 # Libraries/Packages used <br>
 MySql.Data for MySql Connection between MySQL Server and C# application <br>
 
