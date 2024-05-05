@@ -445,6 +445,7 @@ namespace LibrarySystem{
             }
         }
 
+        //displays all books
         private void displayBooks(List<Books> books ){
             for (int i = 0; i < books.Count; i++){
                 Console.WriteLine(i + 1 + ". " + books[i].getTitle() + " by " + books[i].getAuthor());
@@ -452,6 +453,7 @@ namespace LibrarySystem{
             Console.WriteLine("Enter Number. (1 - " + books.Count + ") or 0 to exit: ");
         }
 
+        //displays all loans
         private void displayLoans(List<Loans> loans, int mode = 0){
             for (int i = 0; i < loans.Count; i++){
                 Console.WriteLine(i + 1 + ". " + loans[i].getBook().getTitle() + " by " + loans[i].getBook().getAuthor() + "\n\tLoaned out: " + loans[i].getLoanDate() + "\n\tDue: " + loans[i].getDueDate() + "\n\tReturned Date: " + loans[i].getReturnDate());

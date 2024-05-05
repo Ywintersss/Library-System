@@ -21,6 +21,7 @@ namespace database{
             return true;
         }
 
+        //prepare query for execution
         public bool prepareQuery(string query){
             if (query == null){
                 return false;
@@ -29,6 +30,7 @@ namespace database{
             return true;
         }
 
+        //execute nonQueries for insert, update, delete
         public void executeNonQuery(){
             if (Command == null){
                 Console.WriteLine("Error: No query is prepared. Command is null");
@@ -55,6 +57,7 @@ namespace database{
             }
         }
 
+        //execute query for select
         public List<string[]>? executeQuery(){
             List<string[]> dataList = new List<string[]>();
             if (Command == null){

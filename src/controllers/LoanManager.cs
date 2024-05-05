@@ -19,6 +19,8 @@ namespace LoanManager{
                 databaseName = "LibraryManagement"
             };
         }
+
+        //opens connection to database
         public bool DBConnection(){
             return this.DBConn.DBConnection();
         }
@@ -116,12 +118,18 @@ namespace LoanManager{
                 if (!DBConn.prepareQuery(query)){
                     Console.WriteLine("Error running query");
                 }
-                try{    
+                try{
+                    //get all loans and iterate through them
                     foreach (var loan in DBConn.executeQuery()){
+                        //loops through all books
                         foreach (var book in books){
+                            //checks if book is already in cache
                             if (cache.Contains(book)){ continue; }
+                            //checks if book is present in the loan
                             if (book.getBookID() == Convert.ToInt32(loan[1])){
+                                //adds loan to list
                                 loans.Add(new Loans(Convert.ToInt32(loan[0]), book, Convert.ToDateTime(loan[2]).ToString("yyyy-MM-dd"), loan[3] == null ? "null" : Convert.ToDateTime(loan[3]).ToString("yyyy-MM-dd"), Convert.ToDateTime(loan[4]).ToString("yyyy-MM-dd")));
+                                //adds book to cache
                                 cache.Add(book);
                             }
                         }
