@@ -56,7 +56,7 @@ namespace LibrarySystem{
                 //displays all books
                 Console.WriteLine("\nBOOK LIST\n_________________________________");    
                 for (int i = 0; i < books.Count; i++){
-                    Console.WriteLine(Convert.ToString(i + 1) + ". " + books[i].getTitle() + " by " + books[i].getAuthor() + "." + " Available: " + books[i].getIsAvailable());
+                    Console.WriteLine(Convert.ToString(i + 1) + ". " + books[i].getTitle() + " by " + books[i].getAuthor() + "." + "|| Available: " + books[i].getIsAvailable());
                 }
 
                 Console.WriteLine("_________________________________\n0. Back \n1. Add Book \n2. Update Book \n3. Delete Book \n4. Loan Book ");
@@ -119,7 +119,6 @@ namespace LibrarySystem{
                 Console.WriteLine("No active loans found. Please try again.");
                 return;
             }
-            Console.WriteLine(activeLoans);
             while(true){
                 Console.WriteLine("\nACTIVE LOAN LIST\n_________________________________");
                 displayLoans(activeLoans);
@@ -135,7 +134,7 @@ namespace LibrarySystem{
             }
         }
 
-        public void addBookPage(){
+        private void addBookPage(){
             string title = "", author = "";
             int state = 0;
             while(true){
@@ -185,14 +184,14 @@ namespace LibrarySystem{
             }
         }
 
-        public void updateBookPage(List<Books>? books = null){
+        private void updateBookPage(List<Books>? books = null){
             if (books == null){
                 Console.WriteLine("No books found. Please try again.");
                 return;
             }
             string title = "", author = "", bookNum, newTitle = "", newAuthor = "";
             Books? bk = books[0];
-            int state = 0;
+            int state = 0, bookCount = books.Count;
             while(true){
                 switch(state){
                     case 0:
@@ -204,6 +203,9 @@ namespace LibrarySystem{
                             continue;
                         // checks if input is a number
                         } else if (!checkChars(bookNum)){
+                            Console.WriteLine("Invalid Book Number. Please try again.");
+                            continue;
+                        } else if (Convert.ToInt32(bookNum) > bookCount){
                             Console.WriteLine("Invalid Book Number. Please try again.");
                             continue;
                         }
@@ -258,14 +260,14 @@ namespace LibrarySystem{
             }
         }
 
-        public void deleteBookPage(List<Books>? books = null){
+        private void deleteBookPage(List<Books>? books = null){
             if (books == null){
                 Console.WriteLine("No books found. Please try again.");
                 return;
             }
             string bookNum;
             Books? bk = books[0];
-            int state = 0;
+            int state = 0, bookCount = books.Count;
             while(true){
                 switch(state){
                     case 0:
@@ -277,6 +279,9 @@ namespace LibrarySystem{
                             continue;
                         // checks if input is a number
                         } else if (!checkChars(bookNum)){
+                            Console.WriteLine("Invalid Book Number. Please try again.");
+                            continue;
+                        } else if (Convert.ToInt32(bookNum) > bookCount){
                             Console.WriteLine("Invalid Book Number. Please try again.");
                             continue;
                         }
@@ -305,7 +310,7 @@ namespace LibrarySystem{
             }
         }
 
-        public void loanBookPage(List<Books>? books = null){
+        private void loanBookPage(List<Books>? books = null){
             if (books == null){
                 Console.WriteLine("No books found. Please try again.");
                 return;
@@ -313,7 +318,7 @@ namespace LibrarySystem{
             string bookNum, title = "", author = "";
             int loanPeriod = 0;
             Books? bk = books[0];
-            int state = 0;
+            int state = 0, bookCount = books.Count;
             while(true){
                 switch(state){
                     case 0:
@@ -324,6 +329,9 @@ namespace LibrarySystem{
                             Console.WriteLine("Invalid Book Number. Please try again.");
                             continue;
                         } else if (!checkChars(bookNum)){
+                            Console.WriteLine("Invalid Book Number. Please try again.");
+                            continue;
+                        } else if (Convert.ToInt32(bookNum) > bookCount){
                             Console.WriteLine("Invalid Book Number. Please try again.");
                             continue;
                         }
@@ -375,14 +383,14 @@ namespace LibrarySystem{
             }
         }
 
-        public void returnBookPage(List<Loans> activeLoans){
+        private void returnBookPage(List<Loans> activeLoans){
             if (activeLoans.Count == 0){
                 Console.WriteLine("No active loans found. Please try again.");
                 return;  
             } 
             string loanNum;
             Loans? ln = activeLoans[0];
-            int state = 0;
+            int state = 0, loanCount = activeLoans.Count;
             while(true){
                 switch(state){
                     case 0:
@@ -393,6 +401,9 @@ namespace LibrarySystem{
                             Console.WriteLine("Invalid Book Number. Please try again.");
                             continue;
                         } else if (!checkChars(loanNum)){
+                            Console.WriteLine("Invalid Book Number. Please try again.");
+                            continue;
+                        } else if (Convert.ToInt32(loanNum) > loanCount){
                             Console.WriteLine("Invalid Book Number. Please try again.");
                             continue;
                         }
@@ -420,7 +431,7 @@ namespace LibrarySystem{
             }
         }
 
-        public bool confirmation(){
+        private bool confirmation(){
             while(true){
                 Console.WriteLine("Are you sure? (y/n)");
                 command = Console.ReadLine();
@@ -434,14 +445,14 @@ namespace LibrarySystem{
             }
         }
 
-        public void displayBooks(List<Books> books ){
+        private void displayBooks(List<Books> books ){
             for (int i = 0; i < books.Count; i++){
                 Console.WriteLine(i + 1 + ". " + books[i].getTitle() + " by " + books[i].getAuthor());
             }
             Console.WriteLine("Enter Number. (1 - " + books.Count + ") or 0 to exit: ");
         }
 
-        public void displayLoans(List<Loans> loans, int mode = 0){
+        private void displayLoans(List<Loans> loans, int mode = 0){
             for (int i = 0; i < loans.Count; i++){
                 Console.WriteLine(i + 1 + ". " + loans[i].getBook().getTitle() + " by " + loans[i].getBook().getAuthor() + "\n\tLoaned out: " + loans[i].getLoanDate() + "\n\tDue: " + loans[i].getDueDate() + "\n\tReturned Date: " + loans[i].getReturnDate());
             }
@@ -453,7 +464,7 @@ namespace LibrarySystem{
         }
 
         //used to check if user input is a number, not a character
-        public bool checkChars(string str){
+        private bool checkChars(string str){
             char character;
             if (str.Length != 1){
                 return false;
@@ -467,15 +478,6 @@ namespace LibrarySystem{
                 }
             }
             return true;
-        }
-    }
-
-    public class Program{
-        static void Main(string[] args){
-            Library library = new Library();
-            library.Init();
-            library.Home();
-            
         }
     }
 }

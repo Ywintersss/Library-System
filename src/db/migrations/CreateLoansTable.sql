@@ -4,5 +4,5 @@ CREATE TABLE Loans(
     LoanDate date NOT NULL,
     ReturnDate date,
     DueDate date NOT NULL,
-    FOREIGN KEY (BookID) REFERENCES Books(BookID)
+    FOREIGN KEY (BookID) REFERENCES Books(BookID) ON DELETE CASCADE
 )
