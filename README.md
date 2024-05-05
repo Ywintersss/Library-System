@@ -206,4 +206,4 @@ The Project was structured in a way that promotes **separation of concerns**. <b
 *Migrations* were used to help keep track of databse modifications and help simplify the initializaiton process. <br>
 
 ### Testing was done to a minimal
-### Mostly Unit Tests for contorller methods
+### Mostly Unit Tests for controller methods
